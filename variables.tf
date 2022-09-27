@@ -60,6 +60,16 @@ variable "target_value" {
   type        = number
   default     = 60
 }
+variable "max_capacity" {
+  description = "Max capacity to scale out"
+  type        = number
+  default     = 1
+}
+variable "min_capacity" {
+  description = "Min capacity to scale in"
+  type        = number
+  default     = 1
+}
 variable "alb_arn_suffix" {
   description = "ARN Suffix (not full ARN) of the Application Load Balancer for use with CloudWatch. Output attribute from LB resource: `arn_suffix`"
   type        = string
