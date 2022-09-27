@@ -63,9 +63,11 @@ variable "target_value" {
 variable "alb_arn_suffix" {
   description = "ARN Suffix (not full ARN) of the Application Load Balancer for use with CloudWatch. Output attribute from LB resource: `arn_suffix`"
   type        = string
+  default     = ""
 }
 
 variable "target_group_arn_suffix" {
   description = "ALB Target Group ARN Suffix (not full ARN) for use with CloudWatch. Output attribute from Target Group resource: `arn_suffix`"
   type        = string
+  default     = ""
 }
