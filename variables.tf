@@ -4,10 +4,10 @@ variable "name" {
   
 }
 
-variable "scalable_target_resource_id" {
-  description = "Scalable target resource id, either from resource `aws_appautoscaling_target` or from `core/ecs-autoscaling-target` module"
-  type        = string
-}
+#variable "scalable_target_resource_id" {
+ # description = "Scalable target resource id, either from resource `aws_appautoscaling_target` or from `core/ecs-autoscaling-target` module"
+  #type        = string
+#}
 
 variable "target_cpu_value" {
   description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
