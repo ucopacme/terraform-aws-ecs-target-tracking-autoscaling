@@ -6,7 +6,9 @@ resource "aws_appautoscaling_target" "this" {
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
-
+#------------------------------------------------------------------------------
+# AWS Auto Scaling - ALB Request Count per Target
+#------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "ecs_policy" {
   name               = join("-", [var.name, "alb"]) 
   count              = var.enable_alb_based_autoscaling ? 1 : 0
@@ -28,6 +30,9 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
   }
 }
 
+#------------------------------------------------------------------------------
+# AWS Auto Scaling - CPU Utilization
+#------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
   count              = var.enable_cpu_based_autoscaling ? 1 : 0
   name               = join("-", [var.name, "cpu"]) 
@@ -48,6 +53,9 @@ resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
   }
 }
 
+#------------------------------------------------------------------------------
+# AWS Auto Scaling - Memory Utilization
+#------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "ecs_service_memory_policy" {
   count              = var.enable_memory_based_autoscaling ? 1 : 0
   name               = join("-", [var.name, "memory"]) 
