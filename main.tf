@@ -1,7 +1,7 @@
 
 resource "aws_appautoscaling_target" "this" {
-  max_capacity       = 3
-  min_capacity       = 1
+  max_capacity       = var.max_capacity
+  min_capacity       = var.min_capacity
   resource_id        = "service/kk-dev-cluster/kk-dev-service"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
