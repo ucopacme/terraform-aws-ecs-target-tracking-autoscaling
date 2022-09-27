@@ -8,7 +8,7 @@ resource "aws_appautoscaling_target" "this" {
 }
 
 resource "aws_appautoscaling_policy" "ecs_policy" {
-  name               = join("-", [var.name, "ecs_policy"]) 
+  name               = join("-", [var.name, "alb"]) 
   count              = var.enable_alb_based_autoscaling ? 1 : 0
   resource_id        = var.scalable_target_resource_id
   scalable_dimension = "ecs:service:DesiredCount"
@@ -30,7 +30,7 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
 
 resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
   count              = var.enable_cpu_based_autoscaling ? 1 : 0
-  name               = "${var.name}-cpu"
+  name               = join("-", [var.name, "cpu"]) 
   resource_id        = var.scalable_target_resource_id
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -50,7 +50,7 @@ resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
 
 resource "aws_appautoscaling_policy" "ecs_service_memory_policy" {
   count              = var.enable_memory_based_autoscaling ? 1 : 0
-  name               = "${var.name}-memory"
+  name               = join("-", [var.name, "memory"]) 
   resource_id        = var.scalable_target_resource_id
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
