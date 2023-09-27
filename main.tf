@@ -1,4 +1,3 @@
-
 resource "aws_appautoscaling_target" "this" {
   max_capacity       = var.max_capacity
   min_capacity       = var.min_capacity
@@ -6,11 +5,12 @@ resource "aws_appautoscaling_target" "this" {
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
+
 #------------------------------------------------------------------------------
 # AWS Auto Scaling - ALB Request Count per Target
 #------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "ecs_policy" {
-  name               = join("-", [var.name, "alb"]) 
+  name               = join("-", [var.name, "alb"])
   count              = var.enable_alb_based_autoscaling ? 1 : 0
   resource_id        = aws_appautoscaling_target.this.resource_id
   scalable_dimension = "ecs:service:DesiredCount"
@@ -35,7 +35,7 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
 #------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
   count              = var.enable_cpu_based_autoscaling ? 1 : 0
-  name               = join("-", [var.name, "cpu"]) 
+  name               = join("-", [var.name, "cpu"])
   resource_id        = aws_appautoscaling_target.this.resource_id
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -58,7 +58,7 @@ resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
 #------------------------------------------------------------------------------
 resource "aws_appautoscaling_policy" "ecs_service_memory_policy" {
   count              = var.enable_memory_based_autoscaling ? 1 : 0
-  name               = join("-", [var.name, "memory"]) 
+  name               = join("-", [var.name, "memory"])
   resource_id        = aws_appautoscaling_target.this.resource_id
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -73,5 +73,38 @@ resource "aws_appautoscaling_policy" "ecs_service_memory_policy" {
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"
     }
+  }
+}
+
+#------------------------------------------------------------------------------
+# AWS Auto Scaling - Scheduled scale-in
+#------------------------------------------------------------------------------
+resource "aws_appautoscaling_scheduled_action" "ecs_service_scheduled_scale_in" {
+  count              = var.enable_scheduled_scale_in ? 1 : 0
+  name               = join("-", [var.name, "scheduled-scale-in"])
+  service_namespace  = "ecs"
+  resource_id        = aws_appautoscaling_target.this.resource_id
+  scalable_dimension = "ecs:service:DesiredCount"
+  schedule           = var.scheduled_scale_in_schedule
+  timezone           = var.scheduled_scale_in_timezone
+
+  scalable_target_action {
+    min_capacity = var.min_capacity
+    max_capacity = var.min_capacity
+  }
+}
+
+resource "aws_appautoscaling_scheduled_action" "ecs_service_scheduled_scale_in_max_capacity_reset" {
+  count              = var.enable_scheduled_scale_in ? 1 : 0
+  name               = join("-", [var.name, "scheduled-scale-in-max-capacity-reset"])
+  service_namespace  = "ecs"
+  resource_id        = aws_appautoscaling_target.this.resource_id
+  scalable_dimension = "ecs:service:DesiredCount"
+  schedule           = var.scheduled_scale_in_max_capacity_reset_schedule
+  timezone           = var.scheduled_scale_in_timezone
+
+  scalable_target_action {
+    min_capacity = var.min_capacity
+    max_capacity = var.max_capacity
   }
 }

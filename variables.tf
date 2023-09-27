@@ -1,7 +1,6 @@
 variable "name" {
   description = "Name of the ECS Policy created, will appear in Auto Scaling under Service in ECS"
   type        = string
-  
 }
 
 variable "resource_id" {
@@ -36,6 +35,30 @@ variable "enable_alb_based_autoscaling" {
   description = "Enable Autoscaling based on ECS Service alb Usage"
   default     = false
   type        = bool
+}
+
+variable "enable_scheduled_scale_in" {
+  description = "Enable scale-in to min_capacity at a scheduled time"
+  default     = false
+  type        = bool
+}
+
+variable "scheduled_scale_in_schedule" {
+  description = "A time at which to scale in task count to min_capacity"
+  type        = string
+  default     = "cron(30 2 * * SUN *)"
+}
+
+variable "scheduled_scale_in_max_capacity_reset_schedule" {
+  description = "A time at which to reset max_capacity to usual value"
+  type        = string
+  default     = "cron(40 2 * * SUN *)"
+}
+
+variable "scheduled_scale_in_timezone" {
+  description = "Timezone for scheduled_scale_in"
+  type        = string
+  default     = "US/Pacific"
 }
 
 variable "scale_in_cooldown" {
