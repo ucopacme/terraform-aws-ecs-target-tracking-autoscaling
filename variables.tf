@@ -46,13 +46,13 @@ variable "enable_scheduled_scale_in" {
 variable "scheduled_scale_in_schedule" {
   description = "A time at which to scale in task count to min_capacity"
   type        = string
-  default     = "cron(30 3 ? * SUN *)"
+  default     = "cron(00 2 ? * SUN *)"
 }
 
 variable "scheduled_scale_in_max_capacity_reset_schedule" {
   description = "A time at which to reset max_capacity to usual value"
   type        = string
-  default     = "cron(40 3 ? * SUN *)"
+  default     = "cron(10 2 ? * SUN *)"
 }
 
 variable "scheduled_scale_in_timezone" {
