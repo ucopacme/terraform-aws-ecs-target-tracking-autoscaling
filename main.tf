@@ -108,3 +108,36 @@ resource "aws_appautoscaling_scheduled_action" "ecs_service_scheduled_scale_in_m
     max_capacity = var.max_capacity
   }
 }
+
+#------------------------------------------------------------------------------
+# AWS Auto Scaling - Scheduled scale-in to zero (e.g. nightly shutdown)
+#------------------------------------------------------------------------------
+resource "aws_appautoscaling_scheduled_action" "ecs_service_scheduled_scale_in_to_zero" {
+  count              = var.enable_scheduled_scale_in_to_zero ? 1 : 0
+  name               = join("-", [var.name, "scheduled-scale-in-to-zero"])
+  service_namespace  = "ecs"
+  resource_id        = aws_appautoscaling_target.this.resource_id
+  scalable_dimension = "ecs:service:DesiredCount"
+  schedule           = var.scheduled_scale_in_to_zero_schedule
+  timezone           = var.scheduled_scale_in_timezone
+
+  scalable_target_action {
+    min_capacity = 0
+    max_capacity = 0
+  }
+}
+
+resource "aws_appautoscaling_scheduled_action" "ecs_service_scheduled_scale_in_to_zero_capacity_reset" {
+  count              = var.enable_scheduled_scale_in_to_zero ? 1 : 0
+  name               = join("-", [var.name, "scheduled-scale-in-to-zero-capacity-reset"])
+  service_namespace  = "ecs"
+  resource_id        = aws_appautoscaling_target.this.resource_id
+  scalable_dimension = "ecs:service:DesiredCount"
+  schedule           = var.scheduled_scale_in_to_zero_capacity_reset_schedule
+  timezone           = var.scheduled_scale_in_timezone
+
+  scalable_target_action {
+    min_capacity = var.min_capacity
+    max_capacity = var.max_capacity
+  }
+}

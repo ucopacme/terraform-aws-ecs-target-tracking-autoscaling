@@ -61,6 +61,24 @@ variable "scheduled_scale_in_timezone" {
   default     = "US/Pacific"
 }
 
+variable "enable_scheduled_scale_in_to_zero" {
+  description = "Enable scale-in to 0 at a scheduled time"
+  default     = false
+  type        = bool
+}
+
+variable "scheduled_scale_in_to_zero_schedule" {
+  description = "A time at which to scale in task count to 0"
+  type        = string
+  default     = "cron(00 21 ? * MON-FRI *)"
+}
+
+variable "scheduled_scale_in_to_zero_capacity_reset_schedule" {
+  description = "A time at which to reset min and max capacity to usual values"
+  type        = string
+  default     = "cron(00 07 ? * MON-FRI *)"
+}
+
 variable "scale_in_cooldown" {
   description = "Time between scale in action"
   default     = 300
